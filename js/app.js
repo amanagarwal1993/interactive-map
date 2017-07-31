@@ -88,7 +88,7 @@ var ViewModel = function() {
       var info_url = 'https://api.foursquare.com/v2/venues/search?ll=' + (place.coords.lat).toString() + ',' + (place.coords.lng).toString() + '&limit=3&radius=50&' + 'client_id=TBCZE2GVGWDVSOGOI1HWF4FNX5SLQ34TRRGFX1KK0AWYLOG4&' + 'client_secret=WAMCH3JMSEHEAU0NZRXUMDO331QCUAPE1XDAG2ZNL0BACCO4&' + 'v=20170610&m=foursquare';
 
       var venues = [];
-      var pictures = new Array;
+      var pictures = [];
       var pictures_length = 0;
 
       place.info.open(map, place.marker);
@@ -121,7 +121,7 @@ var ViewModel = function() {
                 reject("Fetching images failed");
               });
             }));
-          }; // Loop ends
+          } // Loop ends
 
           // Execute the promises at once
           Promise.all(requests).then(function(results) {
@@ -133,15 +133,16 @@ var ViewModel = function() {
             var urls = [];
             third_party_data[place.id] = pictures;
             var width = Math.round($("html").width());
+            var size = 0;
             console.log(width);
             if (width < 418) {
-              var size = width;  
+              size = width;  
             }
             else if (width < 800) {
-              var size = Math.round(width / 2);
+              size = Math.round(width / 2);
             }
             else {
-              var size = Math.round(width / 4);
+              size = Math.round(width / 4);
             }
 
             size = size.toString();
@@ -150,28 +151,30 @@ var ViewModel = function() {
               var img = pictures[i].prefix + size + pictures[i].suffix;
               urls.push(img);
             }
+            
             for(var i=0; i<urls.length; i++) {
               self.current_images.push(urls[i]);
-            };
+            }
 
           }, function() {
             alert("Foursquare images failed to load! Try again.");
-          })
+          });
           // if block ends
         } else {
             // No need to fetch new image urls, they have already been downloaded previously
             console.log("already exists");
             var urls = [];
             var width = Math.round($("html").width());
+          	var size = 0;
             console.log(width);
             if (width < 418) {
-              var size = width;  
+              size = width;  
             }
             else if (width < 800) {
-              var size = Math.round(width / 3);
+              size = Math.round(width / 3);
             }
             else {
-              var size = Math.round(width / 4);
+              size = Math.round(width / 4);
             }
 
             size = size.toString();
@@ -182,12 +185,12 @@ var ViewModel = function() {
             }
             for(var i=0; i<urls.length; i++) {
               self.current_images.push(urls[i]);
-            };
+            }
         }}, function() {
         console.log("Something went wrong while fetching images");
       });
 
-    } // function showIt ends
+    }; // function showIt ends
   }; // class constructor Place ends
 
   // Upon app launch, fill the main_locations array
@@ -196,7 +199,7 @@ var ViewModel = function() {
     self.main_locations.push(place);
     place.id = "place" + i.toString();
     third_party_data[place.id] = [];
-  };
+  }
 
   // Setting a centroid for the map's center
   self.centroid = ko.computed(function() {
