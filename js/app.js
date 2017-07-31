@@ -113,7 +113,7 @@ var ViewModel = function() {
 
             // I create a promise for each ajax request and add them to an array
             // These requests will all be executed at once. Oh Promises, I love you
-            requests.push(new Promise((resolve, reject) => {
+            requests.push(new Promise(function(resolve, reject) {
               $.ajax({url: new_url}).done(function(data) {
                 var pics = data.response.photos.items;
                 resolve(pics);
