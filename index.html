@@ -4,29 +4,39 @@
     <title>Mappo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300">
   </head>
   <body>
 
-    <label>Filter list according to name: </label><input id="filter" type="text" onchange="hideMarker(this.value)" data-bind="textInput: filter_query" placeholder="Press Enter after input">
-    <p data-bind="visible: filter_query().length > 0">Search query: <span data-bind="text: filter_query"></span></p>
-    <ul data-bind="foreach: main_locations">
-      <li class="list_item" data-bind="visible: showIt, attr: {id: id}">
-        <span data-bind="text: name, click: function(data) {showInfo(data);}"></span>
-      </li>
-    </ul>
-    <div id="map" style="width: 80%; height: 500px;"></div>
-    
-    <div id="image_list">
-      <h4 data-bind="text: current_place"></h4>
-      <ul data-bind="foreach: current_images">
-        <img data-bind="attr: {src: $data, alt: 'Smile please'}">
+    <header>
+      <label>Filter By Name </label><input id="filter" type="text" onchange="hideMarker(this.value)" data-bind="textInput: filter_query" placeholder="Press Enter after input">
+    </header>
+
+    <div class="list">
+      <p data-bind="visible: filter_query().length > 0">Search query: <span id="query" data-bind="text: filter_query"></span></p>
+      <ul data-bind="foreach: main_locations" id="places_list">
+        <li class="list_item" data-bind="visible: showIt, attr: {id: id}, click: function(data) {showInfo(data);}">
+          <span data-bind="text: name"></span>
+        </li>
       </ul>
     </div>
 
+    <div id="image_list" data-bind="visible: current_images().length > 0">
+      <h4 data-bind="text: current_place"></h4>
+      <input type="button" onclick="closeDiv()" value="Close" >
+      <p>(Photographs from Foursquare)</p>
+      <ul data-bind="foreach: current_images">
+        <img data-bind="attr: {src: $data}" alt="Smile please" class="photograph">
+      </ul>
+    </div>
+
+    <div id="map"></div>
+    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-debug.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="app.js"></script>
-    <script src="map.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/map.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyDe7F-pzuEmaGzAC5qdtuFFTl-UJXGHDlw&callback=mapModel" onerror="loadError()"></script>
 
   </body>
