@@ -49,17 +49,17 @@ function hideMarker(text) {
     else {
       place.marker.setVisible(true);
     }
-  })
-};
+  });
+}
 
 // Closes the image list upon clicking button
 function closeDiv() {
   vm.current_images.removeAll();
   vm.current_place("");
-};
+}
 
 
 // Function runs when the Google maps API fails to load properly.
 function loadError() {
   alert("Oh no. Google maps failed to load!");
-};
+}
