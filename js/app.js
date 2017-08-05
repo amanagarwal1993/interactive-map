@@ -76,7 +76,20 @@ var ViewModel = function() {
         return false;
       }
     }, this);
-
+    
+    // This function creates a promise for fetching images from any one venue
+    // It will be used later in the showInfo function
+    function FetchImagePromise(theUrl) {
+      return new Promise(function(resolve, reject) {
+        $.ajax({url: theUrl}).done(function(data) {
+          var pics = data.response.photos.items;
+          resolve(pics);
+        }).fail(function() {
+          reject("Fetching images failed");
+        });
+      });
+    }
+    
     /**
     * @description When a place or its map marker is clicked, it makes ajax calls to Foursquare API and opens a div showing pictures
     */
@@ -92,9 +105,6 @@ var ViewModel = function() {
       var pictures_length = 0;
 
       place.info.open(map, place.marker);
-      setTimeout(function() {
-        place.marker.setAnimation(null);
-      }, 900);
 
       $.get(info_url).then(function (data) {
         // Getting venues
@@ -106,21 +116,15 @@ var ViewModel = function() {
         // Getting images
         if ((third_party_data[place.id]).length < 1) {
           var requests = [];
+          
           // Get 2 picture urls for each ID
           for(var i=0; i<venues.length; i++) { 
             var venue = venues[i];
             var new_url = "https://api.foursquare.com/v2/venues/" + venue.id + "/photos?limit=3&" + "client_id=TBCZE2GVGWDVSOGOI1HWF4FNX5SLQ34TRRGFX1KK0AWYLOG4&" + "client_secret=WAMCH3JMSEHEAU0NZRXUMDO331QCUAPE1XDAG2ZNL0BACCO4&v=20170610";
 
-            // I create a promise for each ajax request and add them to an array
+            // I create a promise for each ajax request using FetchImagePromise() and add them to an array
             // These requests will all be executed at once. Oh Promises, I love you
-            requests.push(new Promise(function(resolve, reject) {
-              $.ajax({url: new_url}).done(function(data) {
-                var pics = data.response.photos.items;
-                resolve(pics);
-              }).fail(function() {
-                reject("Fetching images failed");
-              });
-            }));
+            requests.push(FetchImagePromise(new_url));
           } // Loop ends
 
           // Execute the promises at once
@@ -134,12 +138,11 @@ var ViewModel = function() {
             third_party_data[place.id] = pictures;
             var width = Math.round($("html").width());
             var size = 0;
-            console.log(width);
             if (width < 418) {
               size = width;  
             }
             else if (width < 800) {
-              size = Math.round(width / 2);
+              size = Math.round(width / 3);
             }
             else {
               size = Math.round(width / 4);
@@ -148,13 +151,16 @@ var ViewModel = function() {
             size = size.toString();
             size = size + "x" + size;
             for (var i=0; i<pictures.length; i++) {
+              console.log(pictures[i]);
               var img = pictures[i].prefix + size + pictures[i].suffix;
               urls.push(img);
             }
             
-            for(var i=0; i<urls.length; i++) {
-              self.current_images.push(urls[i]);
+            for(var j=0; j<urls.length; j++) {
+              self.current_images.push(urls[j]);
             }
+
+            place.marker.setAnimation(null);
 
           }, function() {
             alert("Foursquare images failed to load! Try again.");
@@ -179,13 +185,16 @@ var ViewModel = function() {
 
             size = size.toString();
             size = size + "x" + size;
-            for (var i=0; i<third_party_data[place.id].length; i++) {
-              var img = third_party_data[place.id][i].prefix + size + third_party_data[place.id][i].suffix;
+            for (var k=0; k<third_party_data[place.id].length; k++) {
+              var img = third_party_data[place.id][k].prefix + size + third_party_data[place.id][k].suffix;
               urls.push(img);
             }
-            for(var i=0; i<urls.length; i++) {
-              self.current_images.push(urls[i]);
+            for(var p=0; p<urls.length; p++) {
+              self.current_images.push(urls[p]);
             }
+            setTimeout(function() {
+              place.marker.setAnimation(null);
+            }, 900);
         }}, function() {
         console.log("Something went wrong while fetching images");
       });

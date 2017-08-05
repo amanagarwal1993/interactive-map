@@ -58,6 +58,15 @@ function closeDiv() {
   vm.current_place("");
 }
 
+$(document).ajaxStart(function(){
+    $("#loader").css("display", "block");
+});
+
+$(document).ajaxComplete(function(){
+  setTimeout(function() {
+    $("#loader").css("display", "none");
+  }, 500);
+});
 
 // Function runs when the Google maps API fails to load properly.
 function loadError() {

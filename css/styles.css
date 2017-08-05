@@ -1,9 +1,12 @@
 html, body {
   width: 100%;
-  min-width: 320px;
-  margin: auto;
   background-color: #e9e9e9;
   font-size: 18px;
+}
+
+#container {
+  min-width: 320px;
+  margin: auto;
 }
 
 header {
@@ -75,6 +78,22 @@ label {
 .list_item span {
   position: relative;
   top: 35%;
+}
+
+#loader {
+  display: none;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: spin 2s linear infinite;
+  margin: 15px auto 10px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 #image_list {
@@ -177,6 +196,12 @@ label {
 @media screen and (min-width: 767px) {
   #places_list {
     width: 98%;
+  }
+  
+  .photograph {
+    width: 32%;
+    margin-left: 0;
+    margin-right: 0;
   }
   
   .list_item {
