@@ -40,18 +40,6 @@ var mapModel = function() {
   });
 };
 
-// Hides markers which are not in current filtered list.
-function hideMarker(text) {
-  vm.main_locations().forEach(function(place) {
-    if (place.showIt() == false) {
-      place.marker.setVisible(false);
-    }
-    else {
-      place.marker.setVisible(true);
-    }
-  });
-}
-
 // Closes the image list upon clicking button
 function closeDiv() {
   vm.current_images.removeAll();

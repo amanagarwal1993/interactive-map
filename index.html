@@ -10,7 +10,7 @@
   <body>
     <div id="container">
       <header>
-        <label>Filter By Name </label><input id="filter" type="text" onchange="hideMarker(this.value)" data-bind="textInput: filter_query" placeholder="Press Enter after input">
+        <label>Filter By Name </label><input id="filter" type="text" data-bind="textInput: filter_query" placeholder="Press Enter after input">
       </header>
 
       <div class="list">
@@ -21,7 +21,7 @@
           </li>
         </ul>
       </div>
-      
+
       <div class="ajax">
         <div id="loader"></div>
         <div id="image_list" data-bind="visible: current_images().length > 0">
