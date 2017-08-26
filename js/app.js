@@ -44,7 +44,7 @@ var Place = function(data, vm) {
   this.city = data.city;
   this.coords = data.coords;
   this.type = data.type;
-  this.marker;
+  this.marker = null;
   this.id = "";
   this.info = {};
 
@@ -146,7 +146,7 @@ var Place = function(data, vm) {
           size = size + "x" + size;
           for (var i=0; i<pictures.length; i++) {
             console.log(pictures[i]);
-            if (pictures[i] != null) {
+            if (pictures[i] !== null) {
               var img = pictures[i].prefix + size + pictures[i].suffix;
               urls.push(img); 
             }
